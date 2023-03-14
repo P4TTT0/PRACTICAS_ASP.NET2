@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PubContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PubContext"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PubContexto"));
 });
 
 var app = builder.Build();
