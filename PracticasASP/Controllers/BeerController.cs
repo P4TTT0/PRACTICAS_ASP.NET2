@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PracticasASP.Models;
+using PracticasASP.Models.ViewModels;
 
 namespace PracticasASP.Controllers
 {
@@ -27,9 +28,21 @@ namespace PracticasASP.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Create(int a)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(BeerViewModel model)
 		{
-			ViewData["Brands"] = new SelectList(_context.Brands, "BrandId", "Name");
+			if(ModelState.IsValid)
+			{
+				Beer beer = new Beer()
+				{
+					Name = model.Name,
+					BrandId = model.BrandId
+				};
+				_context.Add(beer);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+			ViewData["Brands"] = new SelectList(_context.Brands, "BrandId", "Name", model.BrandId);
 			return View();
 		}
 	}
